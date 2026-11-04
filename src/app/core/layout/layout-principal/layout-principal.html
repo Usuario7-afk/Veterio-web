@@ -1,0 +1,71 @@
+<ng-container *ngIf="usuario && !enLogin; else vistaLibre">
+  <div class="estructura">
+    <header class="barra-movil d-lg-none">
+      <button
+        type="button"
+        class="btn btn-link text-white p-0"
+        aria-controls="menu-principal"
+        [attr.aria-expanded]="menuAbierto"
+        aria-label="Abrir menú"
+        (click)="alternarMenu()"
+      >
+        <i class="bi bi-list fs-2" aria-hidden="true"></i>
+      </button>
+      <app-logo [claro]="true" [alto]="28"></app-logo>
+    </header>
+
+    <aside
+      id="menu-principal"
+      class="offcanvas-lg offcanvas-start menu-principal"
+      [class.show]="menuAbierto"
+      tabindex="-1"
+      aria-label="Menú principal"
+    >
+      <app-menu-lateral
+        [usuario]="usuario"
+        [opciones]="opciones"
+        (navegar)="cerrarMenu()"
+        (cerrar)="cerrarMenu()"
+        (salir)="cerrarSesion()"
+      ></app-menu-lateral>
+    </aside>
+    <div *ngIf="menuAbierto" class="offcanvas-backdrop fade show d-lg-none" (click)="cerrarMenu()"></div>
+
+    <main class="contenido-principal">
+      <div class="contenedor-pagina">
+        <router-outlet></router-outlet>
+      </div>
+      <footer class="pie small text-secondary">Veterio · {{ anio }}</footer>
+    </main>
+  </div>
+</ng-container>
+
+<ng-template #vistaLibre>
+  <router-outlet *ngIf="enLogin; else sinSesion"></router-outlet>
+</ng-template>
+
+<ng-template #sinSesion>
+  <div class="aviso-sesion">
+    <div class="card tarjeta-veterio text-center">
+      <div class="card-body p-4 p-md-5">
+        <app-logo [alto]="40" [conTexto]="true"></app-logo>
+        <h1 class="h5 mt-4">Sesión no iniciada</h1>
+        <p class="text-secondary">Ingresa con tu cuenta para ver la información de la clínica.</p>
+        <a routerLink="/cuenta/login" class="btn btn-primary">Ir al inicio de sesión</a>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<app-contenedor-toasts></app-contenedor-toasts>
+
+<app-modal-confirmacion
+  [visible]="solicitud !== null"
+  [titulo]="solicitud?.titulo ?? ''"
+  [mensaje]="solicitud?.mensaje ?? ''"
+  [textoConfirmar]="solicitud?.textoConfirmar ?? 'Confirmar'"
+  [textoCancelar]="solicitud?.textoCancelar ?? 'Cancelar'"
+  [variante]="solicitud?.variante ?? 'primary'"
+  (confirmar)="responder(true)"
+  (cancelar)="responder(false)"
+></app-modal-confirmacion>

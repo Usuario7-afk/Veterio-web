@@ -1,0 +1,17 @@
+<div class="estado-vacio text-center">
+  <img
+    *ngIf="imagen && imagenDisponible; else soloIcono"
+    [src]="imagen"
+    alt=""
+    class="ilustracion mb-3"
+    (error)="alFallarImagen()"
+  />
+  <ng-template #soloIcono>
+    <i class="bi icono-vacio mb-2" [ngClass]="icono" aria-hidden="true"></i>
+  </ng-template>
+  <h3 class="h6 mb-1">{{ titulo }}</h3>
+  <p *ngIf="mensaje" class="text-secondary small mb-3">{{ mensaje }}</p>
+  <button *ngIf="textoAccion" type="button" class="btn btn-primary btn-sm" (click)="accion.emit()">
+    {{ textoAccion }}
+  </button>
+</div>

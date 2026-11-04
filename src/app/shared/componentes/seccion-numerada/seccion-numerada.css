@@ -1,0 +1,7 @@
+:host {
+  display: block;
+}
+
+:host + :host {
+  margin-top: 1.25rem;
+}

@@ -1,0 +1,51 @@
+<section class="card tarjeta-veterio">
+  <div class="card-body">
+    <div class="text-center mb-3">
+      <app-avatar-especie [especie]="mascota.especie" [nombre]="mascota.nombre" tamano="lg"></app-avatar-especie>
+      <h2 class="h5 mt-2 mb-0">{{ mascota.nombre }}</h2>
+      <div class="small text-secondary">
+        {{ mascota.especie | especie }} · {{ mascota.raza }} · {{ mascota.sexo === 'macho' ? 'Macho' : 'Hembra' }}
+      </div>
+    </div>
+
+    <dl class="datos mb-3">
+      <div>
+        <dt>Edad</dt>
+        <dd>{{ mascota.fechaNacimiento | edad }}</dd>
+      </div>
+      <div>
+        <dt>Peso</dt>
+        <dd>{{ mascota.peso }} kg</dd>
+      </div>
+      <div>
+        <dt>Color</dt>
+        <dd>{{ mascota.color || 'Sin dato' }}</dd>
+      </div>
+      <div>
+        <dt>Registro</dt>
+        <dd>{{ mascota.fechaRegistro | fechaHora }}</dd>
+      </div>
+    </dl>
+
+    <div class="mb-3">
+      <div class="small fw-semibold mb-1">Alergias</div>
+      <span *ngFor="let alergia of mascota.alergias" class="badge text-bg-danger-subtle text-danger-emphasis border border-danger-subtle me-1">
+        {{ alergia }}
+      </span>
+      <span *ngIf="mascota.alergias.length === 0" class="small text-secondary">Ninguna registrada</span>
+    </div>
+
+    <div *ngIf="mascota.observaciones" class="mb-3">
+      <div class="small fw-semibold mb-1">Observaciones</div>
+      <p class="small mb-0">{{ mascota.observaciones }}</p>
+    </div>
+
+    <div class="pt-3 border-top">
+      <app-tarjeta-persona [persona]="dueno"></app-tarjeta-persona>
+    </div>
+
+    <button *ngIf="puedeEditar" type="button" class="btn btn-outline-secondary btn-sm w-100 mt-3" (click)="editar.emit(mascota.id)">
+      <i class="bi bi-pencil me-1" aria-hidden="true"></i>Editar datos
+    </button>
+  </div>
+</section>

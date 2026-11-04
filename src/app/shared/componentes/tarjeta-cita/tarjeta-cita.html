@@ -1,0 +1,64 @@
+<article
+  class="cita"
+  [ngClass]="'borde-estado-' + cita.estado"
+  [resaltarProxima]="cita"
+  [referencia]="referencia"
+>
+  <div class="d-flex gap-3 align-items-start">
+    <div class="hora text-center">
+      <div class="fw-bold text-nowrap">{{ cita.hora | hora12 }}</div>
+      <div *ngIf="mostrarFecha" class="small text-secondary">{{ cita.fecha | fechaHora: 'diaMes' }}</div>
+    </div>
+    <div class="flex-grow-1 min-w-0">
+      <div class="d-flex flex-wrap align-items-center gap-2">
+        <span *ngIf="mostrarMascota" class="fw-semibold">{{ cita.mascota?.nombre ?? 'Mascota eliminada' }}</span>
+        <span class="text-secondary small">{{ cita.motivo | servicio }}</span>
+        <app-insignia-estado class="ms-auto" [estado]="cita.estado"></app-insignia-estado>
+      </div>
+      <div class="small text-secondary text-truncate">
+        <span *ngIf="mostrarMascota && cita.dueno">{{ cita.dueno.nombreCompleto }}</span>
+        <span *ngIf="mostrarMascota && cita.dueno && mostrarVeterinario"> · </span>
+        <span *ngIf="mostrarVeterinario">{{ cita.veterinario?.nombreCorto ?? 'Sin veterinario' }}</span>
+      </div>
+      <div *ngIf="cita.notas" class="small mt-1">{{ cita.notas }}</div>
+
+      <div *ngIf="activa && (acciones.confirmar || acciones.cancelar || acciones.atender)" class="d-flex flex-wrap gap-2 mt-2">
+        <button
+          *ngIf="acciones.confirmar && cita.estado === 'pendiente'"
+          type="button"
+          class="btn btn-sm btn-suave"
+          (click)="cambiarEstado.emit({ id: cita.id, estado: 'confirmada' })"
+        >
+          Confirmar
+        </button>
+        <button
+          *ngIf="acciones.atender"
+          type="button"
+          class="btn btn-sm btn-primary"
+          (click)="atender.emit(cita)"
+        >
+          Registrar atención
+        </button>
+        <button
+          *ngIf="acciones.cancelar"
+          type="button"
+          class="btn btn-sm btn-outline-danger"
+          confirmarAccion="La cita quedará cancelada y el horario se liberará."
+          tituloConfirmacion="Cancelar cita"
+          textoConfirmar="Cancelar cita"
+          (confirmado)="cambiarEstado.emit({ id: cita.id, estado: 'cancelada' })"
+        >
+          Cancelar
+        </button>
+        <button
+          *ngIf="mostrarMascota && cita.mascota"
+          type="button"
+          class="btn btn-sm btn-link px-1"
+          (click)="verHistorial.emit(cita.mascotaId)"
+        >
+          Ver historial
+        </button>
+      </div>
+    </div>
+  </div>
+</article>

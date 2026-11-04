@@ -1,0 +1,143 @@
+<ng-container *tieneRol="['administrador', 'recepcion']; sino: sinPermiso">
+  <div class="tarjeta-centrada">
+    <app-encabezado-pagina [titulo]="titulo" subtitulo="Datos de la mascota y de su dueño"></app-encabezado-pagina>
+
+    <form class="card tarjeta-veterio" [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+      <div class="card-body p-3 p-md-4">
+        <app-seccion-numerada [numero]="1" titulo="Datos de la mascota" formGroupName="mascota">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label for="nombre" class="form-label">Nombre</label>
+              <input id="nombre" class="form-control" formControlName="nombre" autoenfoque />
+              <app-errores-campo [control]="datosMascota.controls.nombre"></app-errores-campo>
+            </div>
+            <div class="col-6 col-md-4">
+              <label for="especie" class="form-label">Especie</label>
+              <select id="especie" class="form-select" formControlName="especie">
+                <option *ngFor="let especie of especies" [value]="especie.codigo">{{ especie.nombre }}</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-4">
+              <label for="raza" class="form-label">Raza</label>
+              <input id="raza" class="form-control" formControlName="raza" list="lista-razas" />
+              <datalist id="lista-razas">
+                <option *ngFor="let raza of razasSugeridas" [value]="raza"></option>
+              </datalist>
+              <app-errores-campo [control]="datosMascota.controls.raza"></app-errores-campo>
+            </div>
+            <div class="col-6 col-md-3">
+              <span class="form-label d-block">Sexo</span>
+              <div class="btn-group w-100" role="group" aria-label="Sexo">
+                <input type="radio" class="btn-check" id="sexo-macho" value="macho" formControlName="sexo" />
+                <label class="btn btn-outline-primary" for="sexo-macho">Macho</label>
+                <input type="radio" class="btn-check" id="sexo-hembra" value="hembra" formControlName="sexo" />
+                <label class="btn btn-outline-primary" for="sexo-hembra">Hembra</label>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <label for="nacimiento" class="form-label">Fecha de nacimiento</label>
+              <input id="nacimiento" type="date" class="form-control" formControlName="fechaNacimiento" [max]="hoy" />
+              <app-errores-campo [control]="datosMascota.controls.fechaNacimiento"></app-errores-campo>
+            </div>
+            <div class="col-6 col-md-3">
+              <label for="peso" class="form-label">Peso (kg)</label>
+              <input id="peso" type="number" step="0.01" min="0" class="form-control" formControlName="peso" />
+              <app-errores-campo [control]="datosMascota.controls.peso"></app-errores-campo>
+            </div>
+            <div class="col-6 col-md-3">
+              <label for="color" class="form-label">Color</label>
+              <input id="color" class="form-control" formControlName="color" />
+            </div>
+          </div>
+
+          <div class="mt-3" formArrayName="alergias">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="form-label mb-0">Alergias</span>
+              <button type="button" class="btn btn-sm btn-suave" (click)="agregarAlergia()">
+                <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Agregar alergia
+              </button>
+            </div>
+            <p *ngIf="alergias.length === 0" class="small text-secondary mb-0">Sin alergias registradas.</p>
+            <div class="row g-2">
+              <div class="col-md-6" *ngFor="let alergia of alergias.controls; let i = index">
+                <div class="input-group">
+                  <input
+                    class="form-control"
+                    [formControlName]="i"
+                    [attr.aria-label]="'Alergia ' + (i + 1)"
+                    placeholder="Ej. Penicilina"
+                    [autoenfoque]="alergias.dirty"
+                  />
+                  <button type="button" class="btn btn-outline-danger" [attr.aria-label]="'Quitar alergia ' + (i + 1)" (click)="quitarAlergia(i)">
+                    <i class="bi bi-trash" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <app-errores-campo [control]="alergia"></app-errores-campo>
+              </div>
+            </div>
+            <app-errores-campo [control]="alergias" [mensajes]="{ duplicados: 'Hay alergias repetidas.' }"></app-errores-campo>
+          </div>
+        </app-seccion-numerada>
+
+        <app-seccion-numerada [numero]="2" titulo="Dueño">
+          <div class="btn-group mb-3" role="group" aria-label="Tipo de dueño">
+            <input type="radio" class="btn-check" id="modo-existente" value="existente" formControlName="modoDueno" />
+            <label class="btn btn-outline-primary" for="modo-existente">Dueño registrado</label>
+            <input type="radio" class="btn-check" id="modo-nuevo" value="nuevo" formControlName="modoDueno" />
+            <label class="btn btn-outline-primary" for="modo-nuevo">Nuevo dueño</label>
+          </div>
+
+          <div *ngIf="!modoNuevo; else nuevoDueno" class="row g-3">
+            <div class="col-md-5">
+              <label for="filtro-dueno" class="form-label">Buscar</label>
+              <input id="filtro-dueno" class="form-control" [formControl]="filtroDueno" placeholder="Nombre o DNI" />
+            </div>
+            <div class="col-md-7">
+              <label for="dueno" class="form-label">Dueño</label>
+              <select id="dueno" class="form-select" formControlName="duenoId">
+                <option value="">Selecciona un dueño</option>
+                <option *ngFor="let dueno of duenosVisibles" [value]="dueno.id">
+                  {{ dueno.apellidos }}, {{ dueno.nombres }} · DNI {{ dueno.documento }}
+                </option>
+              </select>
+              <app-errores-campo [control]="formulario.controls.duenoId" [mensajes]="{ required: 'Selecciona un dueño o registra uno nuevo.' }"></app-errores-campo>
+            </div>
+            <div class="col-12" *ngIf="duenoSeleccionado">
+              <div class="p-3 rounded bg-light">
+                <app-tarjeta-persona [persona]="duenoSeleccionado"></app-tarjeta-persona>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #nuevoDueno>
+            <app-datos-dueno [grupo]="formulario.controls.dueno"></app-datos-dueno>
+          </ng-template>
+        </app-seccion-numerada>
+
+        <app-seccion-numerada [numero]="3" titulo="Observaciones" formGroupName="mascota">
+          <label for="observaciones" class="visually-hidden">Observaciones</label>
+          <textarea
+            id="observaciones"
+            class="form-control"
+            rows="3"
+            formControlName="observaciones"
+            placeholder="Comportamiento, dieta u otros datos útiles para la atención"
+          ></textarea>
+          <app-errores-campo [control]="datosMascota.controls.observaciones"></app-errores-campo>
+        </app-seccion-numerada>
+      </div>
+
+      <div class="card-footer bg-white d-flex flex-column flex-sm-row justify-content-end gap-2 p-3">
+        <button type="button" class="btn btn-outline-secondary" (click)="cancelar()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="guardando">
+          <span *ngIf="formulario.pending" class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
+          {{ mascotaEditada ? 'Guardar cambios' : 'Guardar mascota' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-container>
+
+<ng-template #sinPermiso>
+  <app-estado-vacio icono="bi-lock" titulo="Sin permiso" mensaje="Solo recepción y administración pueden registrar mascotas."></app-estado-vacio>
+</ng-template>

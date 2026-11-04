@@ -1,0 +1,37 @@
+<div class="d-flex align-items-center gap-2 mb-3">
+  <button type="button" class="btn btn-outline-secondary btn-sm" aria-label="Mes anterior" (click)="cambiarMes.emit(-1)">
+    <i class="bi bi-chevron-left" aria-hidden="true"></i>
+  </button>
+  <h2 class="h5 mb-0 text-primary titulo-mes">{{ titulo }}</h2>
+  <button type="button" class="btn btn-outline-secondary btn-sm" aria-label="Mes siguiente" (click)="cambiarMes.emit(1)">
+    <i class="bi bi-chevron-right" aria-hidden="true"></i>
+  </button>
+  <button *ngIf="hoy" type="button" class="btn btn-sm btn-suave ms-auto" (click)="seleccionar.emit(hoy)">Hoy</button>
+</div>
+
+<div class="calendario" role="grid" [attr.aria-label]="titulo">
+  <div class="fila" role="row">
+    <div *ngFor="let dia of encabezados" class="encabezado" role="columnheader">{{ dia }}</div>
+  </div>
+  <div class="fila" role="row" *ngFor="let semana of semanas">
+    <button
+      *ngFor="let dia of semana"
+      type="button"
+      role="gridcell"
+      class="dia"
+      [class.fuera]="!dia.delMes"
+      [class.finde]="dia.finDeSemana"
+      [class.hoy]="dia.fecha === hoy"
+      [class.seleccionado]="dia.fecha === seleccionada"
+      [attr.aria-selected]="dia.fecha === seleccionada"
+      [attr.aria-label]="etiqueta(dia)"
+      (click)="seleccionar.emit(dia.fecha)"
+    >
+      <span class="numero">{{ dia.numero }}</span>
+      <span *ngIf="cantidad(dia) > 0" class="conteo">
+        <span class="d-none d-md-inline">{{ cantidad(dia) }} cita{{ cantidad(dia) === 1 ? '' : 's' }}</span>
+        <span class="d-md-none punto">{{ cantidad(dia) }}</span>
+      </span>
+    </button>
+  </div>
+</div>

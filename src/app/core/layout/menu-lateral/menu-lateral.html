@@ -1,0 +1,29 @@
+<div class="menu d-flex flex-column h-100">
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <app-logo [claro]="true" [alto]="34"></app-logo>
+    <button type="button" class="btn-close btn-close-white d-lg-none" aria-label="Cerrar menú" (click)="cerrar.emit()"></button>
+  </div>
+
+  <div class="usuario mb-4">
+    <div class="fw-semibold text-truncate">{{ usuario.nombre }}</div>
+    <div class="small opacity-75">{{ usuario.rol | rol }}</div>
+  </div>
+
+  <nav class="nav flex-column gap-1 flex-grow-1" aria-label="Secciones">
+    <ng-container *ngFor="let opcion of opciones">
+      <a
+        *tieneRol="opcion.roles"
+        class="nav-link"
+        [routerLink]="opcion.ruta"
+        routerLinkActive="activo"
+        (click)="navegar.emit(opcion.ruta)"
+      >
+        <i class="bi me-2" [ngClass]="opcion.icono" aria-hidden="true"></i>{{ opcion.texto }}
+      </a>
+    </ng-container>
+  </nav>
+
+  <button type="button" class="btn btn-salir mt-3" (click)="salir.emit()">
+    <i class="bi bi-box-arrow-left me-2" aria-hidden="true"></i>Cerrar sesión
+  </button>
+</div>

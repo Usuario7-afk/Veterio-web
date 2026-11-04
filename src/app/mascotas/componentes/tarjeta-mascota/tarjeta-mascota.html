@@ -1,0 +1,33 @@
+<article class="card tarjeta-veterio h-100">
+  <div class="card-body">
+    <div class="d-flex gap-3 align-items-center mb-2">
+      <app-avatar-especie [especie]="item.mascota.especie" [nombre]="item.mascota.nombre"></app-avatar-especie>
+      <div class="min-w-0">
+        <h3 class="h6 mb-0 text-truncate">{{ item.mascota.nombre }}</h3>
+        <div class="small text-secondary">
+          {{ item.mascota.especie | especie }} · {{ item.mascota.raza }} · {{ item.mascota.fechaNacimiento | edad }}
+        </div>
+      </div>
+    </div>
+    <div class="small">
+      <i class="bi bi-person me-1 text-secondary" aria-hidden="true"></i>{{ item.dueno?.nombreCompleto ?? 'Sin dueño' }}
+    </div>
+    <div class="small" *ngIf="item.dueno">
+      <i class="bi bi-telephone me-1 text-secondary" aria-hidden="true"></i>{{ item.dueno.telefono | telefono }}
+    </div>
+    <div *ngIf="item.mascota.alergias.length > 0" class="mt-2">
+      <span *ngFor="let alergia of item.mascota.alergias" class="badge text-bg-light border me-1">
+        <i class="bi bi-exclamation-triangle text-warning me-1" aria-hidden="true"></i>{{ alergia }}
+      </span>
+    </div>
+  </div>
+  <div class="card-footer bg-white border-0 pt-0 d-flex flex-wrap gap-2">
+    <button type="button" class="btn btn-sm btn-suave" (click)="verHistorial.emit(item.mascota.id)">Historial</button>
+    <button *ngIf="puedeAgendar" type="button" class="btn btn-sm btn-outline-primary" (click)="agendar.emit(item.mascota.id)">
+      Agendar
+    </button>
+    <button *ngIf="puedeEditar" type="button" class="btn btn-sm btn-outline-secondary" (click)="editar.emit(item.mascota.id)">
+      Editar
+    </button>
+  </div>
+</article>

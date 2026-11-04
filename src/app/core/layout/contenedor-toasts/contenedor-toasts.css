@@ -1,0 +1,19 @@
+.toast-container {
+  z-index: 1090;
+}
+
+.toast {
+  animation: entrar 0.2s ease-out;
+}
+
+@keyframes entrar {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}

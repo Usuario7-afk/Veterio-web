@@ -1,0 +1,19 @@
+.panel-imagen {
+  position: relative;
+  background: #1e3a8a url('/imagenes/login.jpg') center / cover no-repeat;
+}
+
+.leyenda {
+  position: absolute;
+  left: 2rem;
+  right: 2rem;
+  bottom: 2rem;
+  color: #fff;
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.tarjeta-login {
+  max-width: 440px;
+}

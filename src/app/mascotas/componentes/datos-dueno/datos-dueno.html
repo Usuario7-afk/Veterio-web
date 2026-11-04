@@ -1,0 +1,32 @@
+<div class="row g-3" [formGroup]="grupo">
+  <div class="col-md-4">
+    <label [for]="prefijo + '-documento'" class="form-label">DNI</label>
+    <input [id]="prefijo + '-documento'" class="form-control" formControlName="documento" [soloNumeros]="8" placeholder="8 dígitos" />
+    <app-errores-campo [control]="grupo.controls.documento" textoPendiente="Buscando DNI..."></app-errores-campo>
+  </div>
+  <div class="col-md-4">
+    <label [for]="prefijo + '-nombres'" class="form-label">Nombres</label>
+    <input [id]="prefijo + '-nombres'" class="form-control" formControlName="nombres" />
+    <app-errores-campo [control]="grupo.controls.nombres"></app-errores-campo>
+  </div>
+  <div class="col-md-4">
+    <label [for]="prefijo + '-apellidos'" class="form-label">Apellidos</label>
+    <input [id]="prefijo + '-apellidos'" class="form-control" formControlName="apellidos" />
+    <app-errores-campo [control]="grupo.controls.apellidos"></app-errores-campo>
+  </div>
+  <div class="col-md-4">
+    <label [for]="prefijo + '-telefono'" class="form-label">Celular</label>
+    <input [id]="prefijo + '-telefono'" class="form-control" formControlName="telefono" [soloNumeros]="9" placeholder="9 dígitos" />
+    <app-errores-campo [control]="grupo.controls.telefono"></app-errores-campo>
+  </div>
+  <div class="col-md-4">
+    <label [for]="prefijo + '-correo'" class="form-label">Correo <span class="text-secondary fw-normal">(opcional)</span></label>
+    <input [id]="prefijo + '-correo'" type="email" class="form-control" formControlName="correo" />
+    <app-errores-campo [control]="grupo.controls.correo"></app-errores-campo>
+  </div>
+  <div class="col-md-4">
+    <label [for]="prefijo + '-direccion'" class="form-label">Dirección</label>
+    <input [id]="prefijo + '-direccion'" class="form-control" formControlName="direccion" placeholder="Av. Arequipa 1520, Lince" />
+    <app-errores-campo [control]="grupo.controls.direccion"></app-errores-campo>
+  </div>
+</div>

@@ -1,0 +1,194 @@
+@import 'bootstrap/scss/functions';
+
+$primary: #1e3a8a;
+$secondary: #64748b;
+$success: #1f7a4d;
+$info: #2563eb;
+$warning: #c58a12;
+$danger: #b02a37;
+$light: #f3f4f6;
+$dark: #1f2937;
+
+$body-bg: #f3f4f6;
+$body-color: #1f2937;
+$body-secondary-color: #6b7280;
+$link-color: $primary;
+$border-color: #dfe3ea;
+
+$font-family-sans-serif: 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+$font-size-base: 0.975rem;
+$headings-font-weight: 700;
+$headings-color: $dark;
+$font-weight-semibold: 600;
+
+$border-radius: 0.5rem;
+$border-radius-sm: 0.375rem;
+$border-radius-lg: 0.75rem;
+
+$btn-font-weight: 600;
+$btn-padding-x: 1rem;
+$input-btn-focus-width: 0.2rem;
+$input-btn-focus-color-opacity: 0.2;
+$input-border-color: #cfd6e1;
+$input-bg: #fff;
+$input-disabled-bg: #eef0f3;
+$form-label-font-weight: 600;
+$form-label-font-size: 0.9rem;
+$form-label-margin-bottom: 0.35rem;
+
+$card-border-width: 0;
+$card-border-radius: 0.75rem;
+$card-cap-bg: #fff;
+$card-spacer-y: 1.25rem;
+$card-spacer-x: 1.25rem;
+
+$table-cell-padding-y: 0.7rem;
+$table-cell-padding-x: 0.85rem;
+$table-th-font-weight: 600;
+$table-striped-bg-factor: 0.025;
+
+$badge-font-weight: 600;
+$badge-padding-y: 0.4em;
+$badge-padding-x: 0.75em;
+
+$modal-content-border-width: 0;
+$modal-content-border-radius: 0.75rem;
+$modal-backdrop-opacity: 0.45;
+$offcanvas-horizontal-width: 270px;
+$toast-max-width: 380px;
+$toast-font-size: 0.95rem;
+
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/variables-dark';
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/utilities';
+
+@import 'bootstrap/scss/root';
+@import 'bootstrap/scss/reboot';
+@import 'bootstrap/scss/type';
+@import 'bootstrap/scss/images';
+@import 'bootstrap/scss/containers';
+@import 'bootstrap/scss/grid';
+@import 'bootstrap/scss/tables';
+@import 'bootstrap/scss/forms';
+@import 'bootstrap/scss/buttons';
+@import 'bootstrap/scss/transitions';
+@import 'bootstrap/scss/nav';
+@import 'bootstrap/scss/card';
+@import 'bootstrap/scss/badge';
+@import 'bootstrap/scss/alert';
+@import 'bootstrap/scss/list-group';
+@import 'bootstrap/scss/close';
+@import 'bootstrap/scss/toasts';
+@import 'bootstrap/scss/modal';
+@import 'bootstrap/scss/offcanvas';
+@import 'bootstrap/scss/spinners';
+@import 'bootstrap/scss/helpers';
+@import 'bootstrap/scss/utilities/api';
+
+$sombra-suave: 0 10px 25px rgba(15, 23, 42, 0.07);
+
+$estados-cita: (
+  'pendiente': (#fdf3dc, #8a5a00),
+  'confirmada': (#e8edf8, $primary),
+  'atendida': (#e3f4ea, $success),
+  'cancelada': (#f8e1e3, $danger),
+);
+
+@each $estado, $colores in $estados-cita {
+  .badge-estado-#{$estado} {
+    background-color: nth($colores, 1);
+    color: nth($colores, 2);
+  }
+
+  .borde-estado-#{$estado} {
+    border-left: 4px solid nth($colores, 2);
+  }
+}
+
+.btn-suave {
+  @include button-variant(
+    tint-color($primary, 88%),
+    tint-color($primary, 88%),
+    $primary,
+    tint-color($primary, 78%),
+    tint-color($primary, 78%),
+    shade-color($primary, 10%)
+  );
+}
+
+.tarjeta-veterio {
+  background: #fff;
+  border-radius: $card-border-radius;
+  box-shadow: $sombra-suave;
+}
+
+.tarjeta-centrada {
+  max-width: 880px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.seccion-numerada {
+  background: #fdfdfd;
+  border: 1px dashed $border-color;
+  border-radius: $border-radius;
+  padding: 1.25rem;
+}
+
+.seccion-titulo {
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed #d1d5db;
+}
+
+.form-control.ng-touched.ng-invalid,
+.form-select.ng-touched.ng-invalid {
+  border-color: $form-invalid-border-color;
+
+  &:focus {
+    box-shadow: 0 0 0 $input-btn-focus-width rgba($danger, 0.2);
+  }
+}
+
+.cita-proxima {
+  background-color: #fff8e6 !important;
+  box-shadow: inset 4px 0 0 $warning;
+}
+
+.cita-en-curso {
+  background-color: #eaf6ef !important;
+  box-shadow: inset 4px 0 0 $success;
+}
+
+.table > :not(caption) > * > .cita-proxima,
+.table > :not(caption) > * > .cita-en-curso {
+  --bs-table-bg-state: transparent;
+}
+
+.table thead th {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: $body-secondary-color;
+  background: #f6f7f9;
+  white-space: nowrap;
+}
+
+.texto-secundario {
+  color: $body-secondary-color;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+@include media-breakpoint-down(md) {
+  .btn-bloque-movil {
+    width: 100%;
+  }
+}

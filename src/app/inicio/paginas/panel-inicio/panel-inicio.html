@@ -1,0 +1,119 @@
+<app-encabezado-pagina [titulo]="'Hola, ' + nombre" [subtitulo]="(hoy | fechaHora: 'larga') ?? ''">
+  <button
+    *tieneRol="['administrador', 'recepcion']"
+    type="button"
+    class="btn btn-outline-primary btn-bloque-movil"
+    (click)="ir('/mascotas/nueva')"
+  >
+    <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Registrar mascota
+  </button>
+  <button
+    *tieneRol="['administrador', 'recepcion']"
+    type="button"
+    class="btn btn-primary btn-bloque-movil"
+    (click)="ir('/citas/nueva')"
+  >
+    <i class="bi bi-calendar-plus me-1" aria-hidden="true"></i>Nueva cita
+  </button>
+</app-encabezado-pagina>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-xl-3">
+    <app-tarjeta-resumen
+      [valor]="resumen.citasHoy"
+      [etiqueta]="esVeterinario ? 'Mis citas de hoy' : 'Citas de hoy'"
+      icono="bi-calendar-check"
+      [seleccionable]="true"
+      (seleccionar)="ir('/citas')"
+    ></app-tarjeta-resumen>
+  </div>
+  <div class="col-6 col-xl-3">
+    <app-tarjeta-resumen
+      [valor]="resumen.pendientes"
+      etiqueta="Pendientes de confirmar"
+      icono="bi-hourglass-split"
+      variante="warning"
+    ></app-tarjeta-resumen>
+  </div>
+  <div class="col-6 col-xl-3">
+    <app-tarjeta-resumen
+      [valor]="resumen.mascotas"
+      etiqueta="Mascotas registradas"
+      icono="bi-clipboard2-heart"
+      variante="success"
+      [seleccionable]="true"
+      (seleccionar)="ir('/mascotas')"
+    ></app-tarjeta-resumen>
+  </div>
+  <div class="col-6 col-xl-3">
+    <app-tarjeta-resumen
+      [valor]="resumen.atencionesMes"
+      etiqueta="Atenciones del mes"
+      icono="bi-journal-medical"
+      variante="secondary"
+    ></app-tarjeta-resumen>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-xxl-8">
+    <section class="card tarjeta-veterio h-100">
+      <div class="card-body">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h2 class="h5 mb-0">Citas del día</h2>
+          <a routerLink="/citas" class="small">Ver agenda</a>
+        </div>
+        <app-lista-citas-dia
+          *ngIf="citasHoy.length > 0; else sinCitas"
+          [citas]="citasHoy"
+          [acciones]="acciones"
+          [mostrarVeterinario]="!esVeterinario"
+          (confirmar)="confirmar($event)"
+          (atender)="atender($event)"
+          (verHistorial)="verHistorial($event)"
+        ></app-lista-citas-dia>
+        <ng-template #sinCitas>
+          <app-estado-vacio
+            imagen="imagenes/vacio-citas.png"
+            icono="bi-calendar"
+            titulo="No hay citas para hoy"
+            mensaje="Las citas que se agenden para hoy aparecerán aquí."
+          ></app-estado-vacio>
+        </ng-template>
+      </div>
+    </section>
+  </div>
+
+  <div class="col-xxl-4">
+    <section class="card tarjeta-veterio h-100">
+      <div class="card-body">
+        <h2 class="h5 mb-3">Próximas citas</h2>
+        <ul *ngIf="proximas.length > 0; else sinProximas" class="list-unstyled d-flex flex-column gap-2 mb-0">
+          <li
+            *ngFor="let cita of proximas"
+            class="proxima d-flex align-items-center gap-3"
+            [resaltarProxima]="cita"
+            [minutosAviso]="90"
+          >
+            <app-avatar-especie
+              *ngIf="cita.mascota"
+              [especie]="cita.mascota.especie"
+              [nombre]="cita.mascota.nombre"
+              tamano="sm"
+            ></app-avatar-especie>
+            <div class="flex-grow-1 min-w-0">
+              <div class="fw-semibold text-truncate">{{ cita.mascota?.nombre }} · {{ cita.motivo | servicio }}</div>
+              <div class="small text-secondary">
+                {{ cita.fecha | fechaHora: 'diaMes' }} {{ cita.hora | hora12 }} · {{ cita.veterinario?.nombreCorto }}
+              </div>
+            </div>
+            <span class="small fw-semibold text-primary text-nowrap">{{ cita.fecha | tiempoRestante: cita.hora : ahora }}</span>
+          </li>
+        </ul>
+        <ng-template #sinProximas>
+          <p class="text-secondary small mb-0">No hay citas pendientes.</p>
+        </ng-template>
+      </div>
+    </section>
+  </div>
+</div>

@@ -1,0 +1,87 @@
+<ng-container *ngIf="datos; else noExiste">
+  <app-encabezado-pagina
+    [titulo]="'Historial de ' + datos.mascota.nombre"
+    [subtitulo]="atenciones.length + ' atenciones · ' + (totalGastado | soles) + ' en total'"
+  >
+    <a routerLink="/historial" class="btn btn-outline-secondary btn-bloque-movil">
+      <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>Otra mascota
+    </a>
+    <button *ngIf="puedeAgendar" type="button" class="btn btn-outline-primary btn-bloque-movil" (click)="agendar()">
+      <i class="bi bi-calendar-plus me-1" aria-hidden="true"></i>Agendar cita
+    </button>
+    <button *tieneRol="['administrador', 'veterinario']" type="button" class="btn btn-primary btn-bloque-movil" (click)="registrarAtencion()">
+      <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Registrar atención
+    </button>
+  </app-encabezado-pagina>
+
+  <div class="row g-3">
+    <div class="col-lg-4">
+      <app-ficha-mascota
+        [mascota]="datos.mascota"
+        [dueno]="datos.dueno"
+        [puedeEditar]="puedeEditar"
+        (editar)="editar($event)"
+      ></app-ficha-mascota>
+
+      <section *ngIf="proximasCitas.length > 0" class="card tarjeta-veterio mt-3">
+        <div class="card-body">
+          <h2 class="h6 mb-3">Próximas citas</h2>
+          <div class="d-flex flex-column gap-2">
+            <app-tarjeta-cita
+              *ngFor="let cita of proximasCitas; trackBy: seguirPorId"
+              [cita]="cita"
+              [mostrarMascota]="false"
+              [mostrarFecha]="true"
+            ></app-tarjeta-cita>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-lg-8">
+      <section class="card tarjeta-veterio">
+        <div class="card-body">
+          <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+            <h2 class="h5 mb-0 me-auto">Atenciones</h2>
+            <div class="d-flex flex-wrap gap-1" role="group" aria-label="Filtrar por tipo">
+              <button
+                *ngFor="let opcion of filtros"
+                type="button"
+                class="btn btn-sm"
+                [ngClass]="filtro === opcion.valor ? 'btn-primary' : 'btn-outline-secondary'"
+                [attr.aria-pressed]="filtro === opcion.valor"
+                (click)="filtrar(opcion.valor)"
+              >
+                {{ opcion.texto }} <span class="badge text-bg-light ms-1">{{ opcion.cantidad }}</span>
+              </button>
+            </div>
+          </div>
+
+          <app-linea-tiempo *ngIf="visibles.length > 0; else sinAtenciones" [atenciones]="visibles" (seleccionar)="verDetalle($event)"></app-linea-tiempo>
+          <ng-template #sinAtenciones>
+            <app-estado-vacio
+              imagen="imagenes/vacio-historial.png"
+              icono="bi-journal-medical"
+              titulo="Sin atenciones registradas"
+              mensaje="Cuando el veterinario registre una atención aparecerá en esta línea de tiempo."
+            ></app-estado-vacio>
+          </ng-template>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <app-detalle-atencion [atencion]="seleccionada" [nombreMascota]="datos.mascota.nombre" (cerrar)="cerrarDetalle()"></app-detalle-atencion>
+</ng-container>
+
+<ng-template #noExiste>
+  <div class="card tarjeta-veterio">
+    <app-estado-vacio
+      icono="bi-question-circle"
+      titulo="Mascota no encontrada"
+      mensaje="Puede que el registro se haya eliminado."
+      textoAccion="Volver al historial"
+      (accion)="volver()"
+    ></app-estado-vacio>
+  </div>
+</ng-template>

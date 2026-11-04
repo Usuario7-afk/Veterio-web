@@ -1,0 +1,80 @@
+<app-encabezado-pagina titulo="Agenda de citas" subtitulo="Selecciona un día para ver sus citas">
+  <button *ngIf="puedeAgendar" type="button" class="btn btn-primary btn-bloque-movil" (click)="nuevaCita()">
+    <i class="bi bi-calendar-plus me-1" aria-hidden="true"></i>Nueva cita
+  </button>
+</app-encabezado-pagina>
+
+<div class="row g-3">
+  <div class="col-lg-7 col-xl-8">
+    <section class="card tarjeta-veterio">
+      <div class="card-body">
+        <div class="mb-3">
+          <label for="filtro-veterinario" class="form-label">Veterinario</label>
+          <select id="filtro-veterinario" class="form-select" [formControl]="filtroVeterinario">
+            <option value="">Todos los veterinarios</option>
+            <option *ngFor="let veterinario of veterinarios" [value]="veterinario.id">
+              {{ veterinario.nombreCompleto }} · {{ veterinario.especialidad }}
+            </option>
+          </select>
+        </div>
+        <app-calendario-mensual
+          [anio]="anio"
+          [mes]="mes"
+          [hoy]="hoy"
+          [seleccionada]="seleccionada"
+          [conteos]="conteos"
+          (seleccionar)="seleccionar($event)"
+          (cambiarMes)="cambiarMes($event)"
+        ></app-calendario-mensual>
+        <div class="d-flex flex-wrap gap-3 small text-secondary mt-3">
+          <span><app-insignia-estado estado="pendiente"></app-insignia-estado> por confirmar</span>
+          <span><app-insignia-estado estado="confirmada"></app-insignia-estado> confirmada por el cliente</span>
+          <span><app-insignia-estado estado="atendida"></app-insignia-estado> con atención registrada</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="col-lg-5 col-xl-4">
+    <section class="card tarjeta-veterio">
+      <div class="card-body">
+        <div class="d-flex align-items-start justify-content-between gap-2 mb-3">
+          <div>
+            <h2 class="h5 mb-0 text-capitalize-first">{{ seleccionada | fechaHora: 'larga' }}</h2>
+            <span class="small text-secondary">{{ citasDia.length }} cita{{ citasDia.length === 1 ? '' : 's' }}</span>
+          </div>
+          <button
+            *ngIf="puedeAgendar && !fechaPasada"
+            type="button"
+            class="btn btn-sm btn-suave"
+            [attr.aria-label]="'Agendar cita el ' + (seleccionada | fechaHora: 'corta')"
+            (click)="nuevaCita()"
+          >
+            <i class="bi bi-plus-lg" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <div *ngIf="citasDia.length > 0; else sinCitas" class="d-flex flex-column gap-2">
+          <app-tarjeta-cita
+            *ngFor="let cita of citasDia; trackBy: seguirPorId"
+            [cita]="cita"
+            [acciones]="acciones"
+            (cambiarEstado)="aplicarCambio($event)"
+            (atender)="atender($event)"
+            (verHistorial)="verHistorial($event)"
+          ></app-tarjeta-cita>
+        </div>
+        <ng-template #sinCitas>
+          <app-estado-vacio
+            imagen="imagenes/vacio-citas.png"
+            icono="bi-calendar"
+            titulo="Sin citas este día"
+            [mensaje]="fechaPasada ? 'No se registraron citas.' : 'Hay horarios libres para agendar.'"
+            [textoAccion]="puedeAgendar && !fechaPasada ? 'Agendar cita' : ''"
+            (accion)="nuevaCita()"
+          ></app-estado-vacio>
+        </ng-template>
+      </div>
+    </section>
+  </div>
+</div>

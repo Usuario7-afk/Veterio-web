@@ -1,0 +1,20 @@
+<ng-container *ngIf="horarios.length > 0 && libres > 0; else sinHorarios">
+  <p class="small text-secondary mb-2">{{ libres }} horario{{ libres === 1 ? '' : 's' }} libre{{ libres === 1 ? '' : 's' }}. Los ocupados aparecen deshabilitados.</p>
+  <div class="horarios" role="radiogroup" aria-label="Horarios disponibles">
+    <button
+      *ngFor="let horario of horarios; trackBy: seguirPorHora"
+      type="button"
+      role="radio"
+      class="btn btn-sm"
+      [ngClass]="horario.hora === seleccionada ? 'btn-primary' : 'btn-outline-secondary'"
+      [disabled]="!horario.libre || deshabilitado"
+      [attr.aria-checked]="horario.hora === seleccionada"
+      (click)="elegir.emit(horario.hora)"
+    >
+      {{ horario.hora | hora12 }}
+    </button>
+  </div>
+</ng-container>
+<ng-template #sinHorarios>
+  <div class="alert alert-light border small mb-0">{{ horarios.length > 0 ? 'No quedan horarios libres ese día.' : mensajeVacio }}</div>
+</ng-template>

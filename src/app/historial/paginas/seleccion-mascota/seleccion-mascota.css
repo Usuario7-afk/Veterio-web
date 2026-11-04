@@ -1,0 +1,13 @@
+.opcion {
+  border: 1px solid transparent;
+  transition: border-color 0.15s ease;
+}
+
+.opcion:hover,
+.opcion:focus-visible {
+  border-color: var(--bs-primary);
+}
+
+.min-w-0 {
+  min-width: 0;
+}

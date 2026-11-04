@@ -1,0 +1,59 @@
+<ng-container *ngIf="atencion">
+  <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="titulo-detalle" (click)="cerrar.emit()">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable modal-fullscreen-sm-down" role="document" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h2 id="titulo-detalle" class="modal-title h5">{{ atencion.tipo | servicio }} de {{ nombreMascota }}</h2>
+            <div class="small text-secondary">{{ atencion.fecha | fechaHora: 'larga' }} · {{ atencion.nombreVeterinario }}</div>
+          </div>
+          <button type="button" class="btn-close" aria-label="Cerrar" (click)="cerrar.emit()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-2 mb-3">
+            <div class="col-4"><div class="dato"><span>Peso</span>{{ atencion.peso }} kg</div></div>
+            <div class="col-4"><div class="dato"><span>Temperatura</span>{{ atencion.temperatura }} °C</div></div>
+            <div class="col-4"><div class="dato"><span>Costo</span>{{ atencion.costo | soles }}</div></div>
+          </div>
+          <h3 class="h6">Motivo</h3>
+          <p>{{ atencion.motivo }}</p>
+          <h3 class="h6">Diagnóstico</h3>
+          <p>{{ atencion.diagnostico }}</p>
+          <h3 class="h6">Tratamiento</h3>
+          <p>{{ atencion.tratamiento }}</p>
+
+          <h3 class="h6">Medicamentos</h3>
+          <div *ngIf="atencion.medicamentos.length > 0; else sinMedicamentos" class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead>
+                <tr>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Dosis</th>
+                  <th scope="col">Frecuencia</th>
+                  <th scope="col">Días</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let medicamento of atencion.medicamentos">
+                  <td>{{ medicamento.nombre }}</td>
+                  <td>{{ medicamento.dosis }}</td>
+                  <td>{{ medicamento.frecuencia }}</td>
+                  <td>{{ medicamento.dias }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <ng-template #sinMedicamentos><p class="text-secondary small">No se recetaron medicamentos.</p></ng-template>
+
+          <p *ngIf="atencion.proximoControl" class="alert alert-info small mb-0">
+            Próximo control: {{ atencion.proximoControl | fechaHora: 'larga' }}
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" (click)="cerrar.emit()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show"></div>
+</ng-container>

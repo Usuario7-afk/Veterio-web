@@ -1,0 +1,21 @@
+<label class="form-label" [for]="idCampo">{{ etiqueta }}</label>
+<div class="input-group">
+  <span class="input-group-text bg-white"><i class="bi bi-search" aria-hidden="true"></i></span>
+  <input
+    [id]="idCampo"
+    type="search"
+    class="form-control border-start-0"
+    [placeholder]="placeholder"
+    [formControl]="campo"
+    autocomplete="off"
+  />
+  <button
+    *ngIf="campo.value"
+    type="button"
+    class="btn btn-outline-secondary"
+    (click)="limpiar()"
+    aria-label="Limpiar búsqueda"
+  >
+    <i class="bi bi-x-lg" aria-hidden="true"></i>
+  </button>
+</div>

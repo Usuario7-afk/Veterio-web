@@ -1,0 +1,8 @@
+.encabezado {
+  margin-bottom: 1.5rem;
+}
+
+.encabezado h1 {
+  color: var(--bs-primary);
+  font-weight: 700;
+}

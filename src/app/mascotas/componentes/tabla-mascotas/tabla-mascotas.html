@@ -1,0 +1,59 @@
+<div class="table-responsive">
+  <table class="table table-hover align-middle mb-0">
+    <thead>
+      <tr>
+        <th scope="col">Mascota</th>
+        <th scope="col">Especie y raza</th>
+        <th scope="col">Edad</th>
+        <th scope="col">Dueño</th>
+        <th scope="col">Celular</th>
+        <th scope="col" class="text-end">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items; trackBy: seguirPorId">
+        <td>
+          <div class="d-flex align-items-center gap-2">
+            <app-avatar-especie [especie]="item.mascota.especie" [nombre]="item.mascota.nombre" tamano="sm"></app-avatar-especie>
+            <div>
+              <div class="fw-semibold">{{ item.mascota.nombre }}</div>
+              <div *ngIf="item.mascota.alergias.length > 0" class="small text-warning-emphasis">
+                <i class="bi bi-exclamation-triangle me-1" aria-hidden="true"></i>Alergias
+              </div>
+            </div>
+          </div>
+        </td>
+        <td>{{ item.mascota.especie | especie }} · {{ item.mascota.raza }}</td>
+        <td class="text-nowrap">{{ item.mascota.fechaNacimiento | edad }}</td>
+        <td>
+          <div>{{ item.dueno?.nombreCompleto ?? 'Sin dueño' }}</div>
+          <div class="small text-secondary">DNI {{ item.dueno?.documento }}</div>
+        </td>
+        <td class="text-nowrap">{{ item.dueno?.telefono | telefono }}</td>
+        <td class="text-end text-nowrap">
+          <button type="button" class="btn btn-sm btn-suave me-1" (click)="verHistorial.emit(item.mascota.id)">
+            Historial
+          </button>
+          <button
+            *ngIf="puedeAgendar"
+            type="button"
+            class="btn btn-sm btn-outline-primary me-1"
+            [attr.aria-label]="'Agendar cita para ' + item.mascota.nombre"
+            (click)="agendar.emit(item.mascota.id)"
+          >
+            <i class="bi bi-calendar-plus" aria-hidden="true"></i>
+          </button>
+          <button
+            *ngIf="puedeEditar"
+            type="button"
+            class="btn btn-sm btn-outline-secondary"
+            [attr.aria-label]="'Editar ' + item.mascota.nombre"
+            (click)="editar.emit(item.mascota.id)"
+          >
+            <i class="bi bi-pencil" aria-hidden="true"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

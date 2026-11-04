@@ -1,0 +1,73 @@
+.estructura {
+  min-height: 100vh;
+}
+
+.barra-movil {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1rem;
+  background: var(--bs-primary);
+}
+
+.menu-principal {
+  --bs-offcanvas-width: 270px;
+}
+
+.contenido-principal {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.contenedor-pagina {
+  flex-grow: 1;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.25rem 1rem;
+}
+
+.pie {
+  padding: 1rem;
+  text-align: center;
+}
+
+.aviso-sesion {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.aviso-sesion .card {
+  max-width: 420px;
+  width: 100%;
+}
+
+@media (min-width: 992px) {
+  .estructura {
+    display: flex;
+  }
+
+  .menu-principal {
+    position: sticky;
+    top: 0;
+    width: 250px;
+    height: 100vh;
+    flex-shrink: 0;
+  }
+
+  .contenido-principal {
+    flex-grow: 1;
+  }
+
+  .contenedor-pagina {
+    padding: 2rem 2.25rem;
+  }
+}

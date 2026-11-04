@@ -1,0 +1,20 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--bs-primary);
+}
+
+.logo.claro {
+  color: #fff;
+}
+
+.logo img {
+  width: auto;
+}
+
+.marca {
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1;
+}

@@ -1,0 +1,4 @@
+<div *ngIf="pendiente" class="form-text">
+  <span class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>{{ textoPendiente }}
+</div>
+<div *ngFor="let mensaje of visibles" class="invalid-feedback d-block">{{ mensaje }}</div>

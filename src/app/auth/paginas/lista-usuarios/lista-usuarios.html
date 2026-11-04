@@ -1,0 +1,45 @@
+<ng-container *tieneRol="'administrador'; sino: sinPermiso">
+  <app-encabezado-pagina titulo="Usuarios" [subtitulo]="total + ' cuentas, ' + activos + ' activas'">
+    <button type="button" class="btn btn-primary btn-bloque-movil" (click)="nuevo()">
+      <i class="bi bi-person-plus me-1" aria-hidden="true"></i>Nuevo usuario
+    </button>
+  </app-encabezado-pagina>
+
+  <div class="card tarjeta-veterio">
+    <div class="card-body">
+      <div class="row g-3 mb-3">
+        <div class="col-md-8">
+          <app-buscador-texto placeholder="Nombre o correo" (buscar)="buscar($event)"></app-buscador-texto>
+        </div>
+        <div class="col-md-4">
+          <label for="filtro-rol" class="form-label">Rol</label>
+          <select id="filtro-rol" class="form-select" [formControl]="filtroRol">
+            <option value="todos">Todos</option>
+            <option *ngFor="let rol of roles" [value]="rol[0]">{{ rol[1] }}</option>
+          </select>
+        </div>
+      </div>
+
+      <app-tabla-usuarios
+        *ngIf="usuariosVisibles.length > 0; else vacio"
+        [usuarios]="usuariosVisibles"
+        [idActual]="idActual"
+        [nombresVeterinario]="nombresVeterinario"
+        (editar)="editar($event)"
+        (cambiarEstado)="cambiarEstado($event)"
+      ></app-tabla-usuarios>
+
+      <ng-template #vacio>
+        <app-estado-vacio icono="bi-people" titulo="Sin resultados" mensaje="No hay usuarios con esos filtros."></app-estado-vacio>
+      </ng-template>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #sinPermiso>
+  <app-estado-vacio
+    icono="bi-lock"
+    titulo="Sección solo para el administrador"
+    mensaje="Tu rol no tiene acceso a la gestión de usuarios."
+  ></app-estado-vacio>
+</ng-template>

@@ -1,0 +1,69 @@
+<div class="table-responsive d-none d-md-block">
+  <table class="table align-middle mb-0">
+    <thead>
+      <tr>
+        <th scope="col">Hora</th>
+        <th scope="col">Mascota</th>
+        <th scope="col">Dueño</th>
+        <th scope="col" *ngIf="mostrarVeterinario">Veterinario</th>
+        <th scope="col">Motivo</th>
+        <th scope="col">Estado</th>
+        <th scope="col" class="text-end"><span class="visually-hidden">Acciones</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cita of citas; trackBy: seguirPorId" [resaltarProxima]="cita">
+        <td class="fw-semibold text-primary text-nowrap">{{ cita.hora | hora12 }}</td>
+        <td>
+          <div class="d-flex align-items-center gap-2" *ngIf="cita.mascota; else sinMascota">
+            <app-avatar-especie [especie]="cita.mascota.especie" [nombre]="cita.mascota.nombre" tamano="sm"></app-avatar-especie>
+            <span>{{ cita.mascota.nombre }}</span>
+          </div>
+          <ng-template #sinMascota><span class="text-secondary">Sin registro</span></ng-template>
+        </td>
+        <td>{{ cita.dueno?.nombreCompleto }}</td>
+        <td *ngIf="mostrarVeterinario">{{ cita.veterinario?.nombreCorto }}</td>
+        <td>{{ cita.motivo | servicio }}</td>
+        <td><app-insignia-estado [estado]="cita.estado"></app-insignia-estado></td>
+        <td class="text-end text-nowrap">
+          <button
+            *ngIf="acciones.confirmar && cita.estado === 'pendiente'"
+            type="button"
+            class="btn btn-sm btn-suave me-1"
+            (click)="confirmar.emit(cita.id)"
+          >
+            Confirmar
+          </button>
+          <button
+            *ngIf="acciones.atender && activa(cita)"
+            type="button"
+            class="btn btn-sm btn-primary me-1"
+            (click)="atender.emit(cita)"
+          >
+            Atender
+          </button>
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-secondary"
+            [attr.aria-label]="'Historial de ' + (cita.mascota?.nombre ?? '')"
+            (click)="verHistorial.emit(cita.mascotaId)"
+          >
+            <i class="bi bi-journal-medical" aria-hidden="true"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="d-md-none d-flex flex-column gap-2">
+  <app-tarjeta-cita
+    *ngFor="let cita of citas; trackBy: seguirPorId"
+    [cita]="cita"
+    [mostrarVeterinario]="mostrarVeterinario"
+    [acciones]="{ confirmar: acciones.confirmar, cancelar: false, atender: acciones.atender }"
+    (cambiarEstado)="confirmar.emit($event.id)"
+    (atender)="atender.emit($event)"
+    (verHistorial)="verHistorial.emit($event)"
+  ></app-tarjeta-cita>
+</div>

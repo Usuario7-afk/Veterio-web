@@ -1,0 +1,19 @@
+.modal {
+  background: transparent;
+}
+
+.modal-dialog {
+  animation: aparecer 0.15s ease-out;
+}
+
+@keyframes aparecer {
+  from {
+    transform: translateY(-12px);
+    opacity: 0;
+  }
+
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}

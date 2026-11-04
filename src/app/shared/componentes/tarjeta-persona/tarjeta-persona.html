@@ -1,0 +1,19 @@
+<div *ngIf="persona; else sinPersona" class="d-flex gap-3 align-items-start">
+  <span class="iniciales">{{ persona.iniciales }}</span>
+  <div class="min-w-0">
+    <div class="small text-secondary">{{ persona.tipo }}</div>
+    <div class="fw-semibold">{{ persona.nombreCompleto }}</div>
+    <div class="small text-secondary">{{ persona.descripcion() }}</div>
+    <div *ngIf="mostrarContacto" class="small mt-1 text-break">
+      <a [href]="'tel:' + persona.telefono" class="me-3 text-decoration-none">
+        <i class="bi bi-telephone me-1" aria-hidden="true"></i>{{ persona.telefono | telefono }}
+      </a>
+      <a *ngIf="persona.correo" [href]="'mailto:' + persona.correo" class="text-decoration-none">
+        <i class="bi bi-envelope me-1" aria-hidden="true"></i>{{ persona.correo }}
+      </a>
+    </div>
+  </div>
+</div>
+<ng-template #sinPersona>
+  <p class="text-secondary small mb-0">Sin datos registrados.</p>
+</ng-template>

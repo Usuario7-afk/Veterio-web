@@ -1,0 +1,74 @@
+<div class="row g-0 min-vh-100">
+  <div class="col-lg-6 d-none d-lg-block panel-imagen">
+    <div class="leyenda">
+      <p class="mb-1 fw-semibold">Clínica veterinaria</p>
+      <p class="mb-0 small">Mascotas, citas e historial clínico en un solo lugar.</p>
+    </div>
+  </div>
+
+  <div class="col-lg-6 d-flex align-items-center justify-content-center p-3">
+    <div class="card tarjeta-veterio tarjeta-login w-100">
+      <div class="card-body p-4 p-md-5">
+        <app-logo [alto]="42" [conTexto]="true"></app-logo>
+        <h1 class="h4 mt-4 mb-1">Iniciar sesión</h1>
+        <p class="text-secondary mb-4">Ingresa con tu cuenta de la clínica.</p>
+
+        <div *ngIf="usuarioActual" class="alert alert-info small">
+          Ya tienes una sesión abierta como <strong>{{ usuarioActual.nombre }}</strong>.
+          <div class="mt-2 d-flex gap-2">
+            <a routerLink="/inicio" class="btn btn-sm btn-primary">Ir al inicio</a>
+            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="cerrarSesionActual()">
+              Cambiar de cuenta
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="error" class="alert alert-danger py-2 small" role="alert">{{ error }}</div>
+
+        <form [formGroup]="formulario" (ngSubmit)="ingresar()" novalidate>
+          <div class="mb-3">
+            <label for="correo" class="form-label">Correo</label>
+            <input
+              id="correo"
+              type="email"
+              class="form-control"
+              formControlName="correo"
+              placeholder="nombre@veterio.pe"
+              autocomplete="username"
+              autoenfoque
+            />
+            <app-errores-campo [control]="formulario.controls.correo"></app-errores-campo>
+          </div>
+
+          <div class="mb-4">
+            <label for="clave" class="form-label">Contraseña</label>
+            <div class="input-group">
+              <input
+                id="clave"
+                [type]="mostrarClave ? 'text' : 'password'"
+                class="form-control"
+                formControlName="clave"
+                autocomplete="current-password"
+              />
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                [attr.aria-label]="mostrarClave ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                (click)="alternarClave()"
+              >
+                <i class="bi" [ngClass]="mostrarClave ? 'bi-eye-slash' : 'bi-eye'" aria-hidden="true"></i>
+              </button>
+            </div>
+            <app-errores-campo [control]="formulario.controls.clave"></app-errores-campo>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 py-2">Ingresar</button>
+        </form>
+
+        <p class="small text-secondary mt-4 mb-0">
+          Si olvidaste tu contraseña, pide al administrador que la cambie.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

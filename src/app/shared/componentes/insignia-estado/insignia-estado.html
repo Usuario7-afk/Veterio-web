@@ -1,0 +1,3 @@
+<span class="badge rounded-pill" [ngClass]="estado | estadoCita: 'clase'">
+  <i *ngIf="conIcono" class="bi me-1" [ngClass]="estado | estadoCita: 'icono'" aria-hidden="true"></i>{{ estado | estadoCita }}
+</span>

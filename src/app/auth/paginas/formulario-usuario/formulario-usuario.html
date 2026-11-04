@@ -1,0 +1,99 @@
+<ng-container *tieneRol="'administrador'; sino: sinPermiso">
+  <div class="tarjeta-centrada">
+    <app-encabezado-pagina
+      [titulo]="titulo"
+      [subtitulo]="usuarioEditado ? usuarioEditado.correo : 'Cuenta para el personal de la clínica'"
+    ></app-encabezado-pagina>
+
+    <form class="card tarjeta-veterio" [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+      <div class="card-body p-3 p-md-4">
+        <app-seccion-numerada [numero]="1" titulo="Datos de la cuenta">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="nombre" class="form-label">Nombre completo</label>
+              <input id="nombre" class="form-control" formControlName="nombre" autoenfoque />
+              <app-errores-campo [control]="formulario.controls.nombre"></app-errores-campo>
+            </div>
+            <div class="col-md-6">
+              <label for="correo" class="form-label">Correo</label>
+              <input id="correo" type="email" class="form-control" formControlName="correo" placeholder="nombre@veterio.pe" />
+              <app-errores-campo [control]="formulario.controls.correo" textoPendiente="Verificando correo..."></app-errores-campo>
+            </div>
+          </div>
+        </app-seccion-numerada>
+
+        <app-seccion-numerada [numero]="2" titulo="Rol y estado">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="rol" class="form-label">Rol</label>
+              <select id="rol" class="form-select" formControlName="rol">
+                <option value="" disabled>Selecciona un rol</option>
+                <option *ngFor="let rol of roles" [value]="rol[0]">{{ rol[1] }}</option>
+              </select>
+              <app-errores-campo [control]="formulario.controls.rol"></app-errores-campo>
+              <div *ngIf="esCuentaPropia" class="form-text">No puedes cambiar el rol de tu propia cuenta.</div>
+            </div>
+            <div class="col-md-6" *ngIf="esVeterinario">
+              <label for="veterinario" class="form-label">Ficha de veterinario</label>
+              <select id="veterinario" class="form-select" formControlName="veterinarioId">
+                <option value="">Selecciona</option>
+                <option *ngFor="let veterinario of veterinariosDisponibles" [value]="veterinario.id">
+                  {{ veterinario.nombreCompleto }}
+                </option>
+              </select>
+              <app-errores-campo [control]="formulario.controls.veterinarioId"></app-errores-campo>
+            </div>
+            <div class="col-12">
+              <div class="form-check form-switch">
+                <input id="activo" class="form-check-input" type="checkbox" role="switch" formControlName="activo" />
+                <label for="activo" class="form-check-label">Cuenta activa</label>
+              </div>
+            </div>
+          </div>
+        </app-seccion-numerada>
+
+        <app-seccion-numerada
+          [numero]="3"
+          titulo="Contraseña"
+          [descripcion]="usuarioEditado ? 'Déjala en blanco para mantener la contraseña actual.' : 'Mínimo ' + longitudMinima + ' caracteres.'"
+          formGroupName="claves"
+        >
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="clave" class="form-label">Contraseña</label>
+              <input id="clave" type="password" class="form-control" formControlName="clave" autocomplete="new-password" />
+              <app-errores-campo [control]="formulario.controls.claves.controls.clave"></app-errores-campo>
+            </div>
+            <div class="col-md-6">
+              <label for="confirmacion" class="form-label">Confirmar contraseña</label>
+              <input
+                id="confirmacion"
+                type="password"
+                class="form-control"
+                formControlName="confirmacion"
+                autocomplete="new-password"
+              />
+              <app-errores-campo [control]="formulario.controls.claves"></app-errores-campo>
+            </div>
+          </div>
+        </app-seccion-numerada>
+      </div>
+
+      <div class="card-footer bg-white d-flex flex-column flex-sm-row justify-content-end gap-2 p-3">
+        <button type="button" class="btn btn-outline-secondary" (click)="cancelar()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="guardando">
+          <span *ngIf="formulario.pending" class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-container>
+
+<ng-template #sinPermiso>
+  <app-estado-vacio
+    icono="bi-lock"
+    titulo="Sección solo para el administrador"
+    mensaje="Tu rol no tiene acceso a la gestión de usuarios."
+  ></app-estado-vacio>
+</ng-template>

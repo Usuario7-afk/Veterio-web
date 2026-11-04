@@ -1,0 +1,10 @@
+.medicamento {
+  background: #f6f7f9;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+
+.card-footer {
+  border-top: 1px solid var(--bs-border-color);
+  border-radius: 0 0 0.75rem 0.75rem;
+}

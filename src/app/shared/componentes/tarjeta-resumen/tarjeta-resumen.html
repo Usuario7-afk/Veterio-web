@@ -1,0 +1,18 @@
+<div
+  class="card tarjeta-veterio h-100 resumen"
+  [class.seleccionable]="seleccionable"
+  [attr.role]="seleccionable ? 'button' : null"
+  [attr.tabindex]="seleccionable ? 0 : null"
+  (click)="alSeleccionar()"
+  (keydown.enter)="alSeleccionar()"
+>
+  <div class="card-body d-flex align-items-center gap-3">
+    <span class="icono-resumen" [ngClass]="'icono-' + variante">
+      <i class="bi" [ngClass]="icono" aria-hidden="true"></i>
+    </span>
+    <div>
+      <div class="valor">{{ valor }}</div>
+      <div class="small text-secondary">{{ etiqueta }}</div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+.horarios {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
+  gap: 0.4rem;
+}
+
+.horarios .btn:disabled {
+  text-decoration: line-through;
+  opacity: 0.45;
+}

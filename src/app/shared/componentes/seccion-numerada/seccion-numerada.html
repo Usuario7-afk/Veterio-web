@@ -1,0 +1,7 @@
+<section class="seccion-numerada">
+  <h2 class="seccion-titulo">
+    <span *ngIf="numero !== null">{{ numero }}. </span>{{ titulo }}
+  </h2>
+  <p *ngIf="descripcion" class="small text-secondary mb-3">{{ descripcion }}</p>
+  <ng-content></ng-content>
+</section>

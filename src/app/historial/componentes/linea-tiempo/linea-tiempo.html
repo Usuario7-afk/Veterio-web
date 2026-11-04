@@ -1,0 +1,19 @@
+<ol class="linea">
+  <li *ngFor="let atencion of atenciones; trackBy: seguirPorId" class="evento">
+    <span class="marca" aria-hidden="true"></span>
+    <button type="button" class="contenido text-start w-100" (click)="seleccionar.emit(atencion)">
+      <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+        <span class="fw-bold text-primary">{{ atencion.fecha | fechaHora }}</span>
+        <span class="badge rounded-pill text-bg-light border">{{ atencion.tipo | servicio }}</span>
+        <span class="ms-auto fw-semibold">{{ atencion.costo | soles }}</span>
+      </div>
+      <div class="fw-semibold">{{ atencion.motivo }}</div>
+      <div class="small"><span class="text-secondary">Diagnóstico:</span> {{ atencion.diagnostico }}</div>
+      <div class="small"><span class="text-secondary">Tratamiento:</span> {{ atencion.tratamiento }}</div>
+      <div class="small text-secondary mt-1">
+        {{ atencion.nombreVeterinario }}
+        <span *ngIf="atencion.medicamentos.length > 0"> · {{ atencion.medicamentos.length }} medicamento{{ atencion.medicamentos.length === 1 ? '' : 's' }}</span>
+      </div>
+    </button>
+  </li>
+</ol>

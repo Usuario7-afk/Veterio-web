@@ -1,0 +1,4 @@
+.card-footer {
+  border-top: 1px solid var(--bs-border-color);
+  border-radius: 0 0 0.75rem 0.75rem;
+}

@@ -1,0 +1,47 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.menu {
+  background: var(--bs-primary);
+  color: #fff;
+  padding: 1.5rem 1rem;
+  overflow-y: auto;
+}
+
+.usuario {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.78);
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.85rem;
+}
+
+.nav-link:hover,
+.nav-link:focus-visible {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-link.activo {
+  color: #fff;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.btn-salir {
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  text-align: left;
+}
+
+.btn-salir:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}

@@ -1,0 +1,10 @@
+<span class="logo" [class.claro]="claro">
+  <img
+    *ngIf="imagenDisponible"
+    [src]="ruta"
+    alt="Veterio"
+    [style.height.px]="alto"
+    (error)="alFallarImagen()"
+  />
+  <span *ngIf="conTexto || !imagenDisponible" class="marca" [style.font-size.px]="alto * 0.62">Veterio</span>
+</span>

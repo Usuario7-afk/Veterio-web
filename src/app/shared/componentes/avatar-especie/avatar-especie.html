@@ -1,0 +1,12 @@
+<span class="avatar" [ngClass]="'avatar-' + tamano" [attr.title]="datos.nombre">
+  <img
+    *ngIf="imagenDisponible; else icono"
+    [src]="datos.imagen"
+    [alt]="nombre ? nombre + ', ' + datos.nombre : datos.nombre"
+    loading="lazy"
+    (error)="alFallarImagen()"
+  />
+  <ng-template #icono>
+    <i class="bi" [ngClass]="icono" aria-hidden="true"></i>
+  </ng-template>
+</span>

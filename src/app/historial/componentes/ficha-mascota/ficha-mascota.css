@@ -1,0 +1,22 @@
+.datos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.datos > div {
+  background: #f6f7f9;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.datos dt {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--bs-secondary-color);
+}
+
+.datos dd {
+  margin: 0;
+  font-weight: 600;
+}

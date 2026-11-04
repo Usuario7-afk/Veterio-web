@@ -1,0 +1,16 @@
+.iniciales {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--bs-primary-bg-subtle);
+  color: var(--bs-primary);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.min-w-0 {
+  min-width: 0;
+}

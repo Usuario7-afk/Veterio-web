@@ -1,0 +1,37 @@
+<ng-container *ngIf="visible">
+  <div
+    class="modal fade show d-block"
+    tabindex="-1"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="titulo-confirmacion"
+    (click)="cancelar.emit()"
+  >
+    <div class="modal-dialog modal-dialog-centered" role="document" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="titulo-confirmacion" class="modal-title h5">{{ titulo }}</h2>
+          <button type="button" class="btn-close" aria-label="Cerrar" (click)="cancelar.emit()"></button>
+        </div>
+        <div class="modal-body">
+          <p class="mb-0">{{ mensaje }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" (click)="cancelar.emit()">
+            {{ textoCancelar }}
+          </button>
+          <button
+            type="button"
+            class="btn"
+            [ngClass]="variante === 'danger' ? 'btn-danger' : 'btn-primary'"
+            (click)="confirmar.emit()"
+            autoenfoque
+          >
+            {{ textoConfirmar }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show"></div>
+</ng-container>

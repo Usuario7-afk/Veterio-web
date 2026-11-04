@@ -1,0 +1,14 @@
+.cita {
+  background: #f8f9fb;
+  border-radius: 0.5rem;
+  padding: 0.75rem 0.9rem;
+}
+
+.hora {
+  min-width: 4.75rem;
+  color: var(--bs-primary);
+}
+
+.min-w-0 {
+  min-width: 0;
+}

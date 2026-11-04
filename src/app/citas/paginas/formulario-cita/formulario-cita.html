@@ -1,0 +1,100 @@
+<ng-container *tieneRol="['administrador', 'recepcion']; sino: sinPermiso">
+  <div class="tarjeta-centrada">
+    <app-encabezado-pagina [titulo]="titulo" subtitulo="Elige mascota, veterinario y un horario libre"></app-encabezado-pagina>
+
+    <form class="card tarjeta-veterio" [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+      <div class="card-body p-3 p-md-4">
+        <app-seccion-numerada [numero]="1" titulo="Mascota y motivo">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label for="filtro-mascota" class="form-label">Buscar</label>
+              <input id="filtro-mascota" class="form-control" [formControl]="filtroMascota" placeholder="Mascota, dueño o DNI" autoenfoque />
+            </div>
+            <div class="col-md-8">
+              <label for="mascota" class="form-label">Mascota</label>
+              <select id="mascota" class="form-select" formControlName="mascotaId">
+                <option value="">Selecciona una mascota</option>
+                <option *ngFor="let item of mascotasVisibles" [value]="item.mascota.id">
+                  {{ item.mascota.nombre }} ({{ item.mascota.especie | especie }}) · {{ item.dueno?.nombreCompleto }}
+                </option>
+              </select>
+              <app-errores-campo [control]="formulario.controls.mascotaId"></app-errores-campo>
+            </div>
+            <div class="col-12" *ngIf="seleccion">
+              <div class="p-3 rounded bg-light d-flex flex-column flex-md-row gap-3">
+                <div class="d-flex align-items-center gap-2">
+                  <app-avatar-especie [especie]="seleccion.mascota.especie" [nombre]="seleccion.mascota.nombre"></app-avatar-especie>
+                  <div>
+                    <div class="fw-semibold">{{ seleccion.mascota.nombre }}</div>
+                    <div class="small text-secondary">{{ seleccion.mascota.raza }} · {{ seleccion.mascota.fechaNacimiento | edad }}</div>
+                    <div *ngIf="seleccion.mascota.alergias.length > 0" class="small text-danger">
+                      Alergias: {{ seleccion.mascota.alergias.join(', ') }}
+                    </div>
+                  </div>
+                </div>
+                <app-tarjeta-persona class="flex-grow-1" [persona]="dueno"></app-tarjeta-persona>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="motivo" class="form-label">Motivo</label>
+              <select id="motivo" class="form-select" formControlName="motivo">
+                <option *ngFor="let motivo of motivos" [value]="motivo[0]">{{ motivo[1] }}</option>
+              </select>
+            </div>
+          </div>
+        </app-seccion-numerada>
+
+        <app-seccion-numerada [numero]="2" titulo="Fecha y veterinario">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="fecha" class="form-label">Fecha</label>
+              <input id="fecha" type="date" class="form-control" formControlName="fecha" [min]="hoy" />
+              <app-errores-campo [control]="formulario.controls.fecha"></app-errores-campo>
+            </div>
+            <div class="col-md-6">
+              <label for="veterinario" class="form-label">Veterinario</label>
+              <select id="veterinario" class="form-select" formControlName="veterinarioId">
+                <option value="">Selecciona un veterinario</option>
+                <option *ngFor="let veterinario of veterinarios" [value]="veterinario.id">
+                  {{ veterinario.nombreCompleto }} · {{ veterinario.especialidad }}
+                </option>
+              </select>
+              <app-errores-campo [control]="formulario.controls.veterinarioId"></app-errores-campo>
+            </div>
+          </div>
+        </app-seccion-numerada>
+
+        <app-seccion-numerada [numero]="3" titulo="Horario">
+          <app-selector-horario
+            [horarios]="horarios"
+            [seleccionada]="formulario.controls.hora.value"
+            [mensajeVacio]="mensajeHorario"
+            (elegir)="elegirHora($event)"
+          ></app-selector-horario>
+          <app-errores-campo [control]="formulario.controls.hora" [mensajes]="{ required: 'Elige un horario.' }"></app-errores-campo>
+          <div *ngIf="formulario.pending" class="form-text">
+            <span class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>Verificando disponibilidad...
+          </div>
+          <div *ngIf="formulario.hasError('horarioOcupado')" class="invalid-feedback d-block">
+            Ese horario acaba de ocuparse. Elige otro.
+          </div>
+        </app-seccion-numerada>
+
+        <app-seccion-numerada [numero]="4" titulo="Notas">
+          <label for="notas" class="visually-hidden">Notas</label>
+          <textarea id="notas" class="form-control" rows="2" formControlName="notas" placeholder="Indicaciones para el veterinario"></textarea>
+          <app-errores-campo [control]="formulario.controls.notas"></app-errores-campo>
+        </app-seccion-numerada>
+      </div>
+
+      <div class="card-footer bg-white d-flex flex-column flex-sm-row justify-content-end gap-2 p-3">
+        <button type="button" class="btn btn-outline-secondary" (click)="cancelar()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="guardando">Agendar cita</button>
+      </div>
+    </form>
+  </div>
+</ng-container>
+
+<ng-template #sinPermiso>
+  <app-estado-vacio icono="bi-lock" titulo="Sin permiso" mensaje="Solo recepción y administración pueden agendar citas."></app-estado-vacio>
+</ng-template>

@@ -1,0 +1,9 @@
+.proxima {
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  background: #f6f7f9;
+}
+
+.min-w-0 {
+  min-width: 0;
+}

@@ -1,0 +1,71 @@
+<app-encabezado-pagina titulo="Mascotas" [subtitulo]="total + ' mascotas registradas'">
+  <button *tieneRol="['administrador', 'recepcion']" type="button" class="btn btn-primary btn-bloque-movil" (click)="registrar()">
+    <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Registrar mascota
+  </button>
+</app-encabezado-pagina>
+
+<div class="card tarjeta-veterio mb-3">
+  <div class="card-body">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-8">
+        <app-buscador-texto
+          placeholder="Nombre de la mascota, raza, dueño o DNI"
+          [valor]="texto"
+          (buscar)="buscar($event)"
+        ></app-buscador-texto>
+      </div>
+      <div class="col-md-4">
+        <label for="filtro-especie" class="form-label">Especie</label>
+        <select id="filtro-especie" class="form-select" [formControl]="filtroEspecie">
+          <option value="todas">Todas</option>
+          <option *ngFor="let especie of especies" [value]="especie.codigo">{{ especie.nombre }}</option>
+        </select>
+      </div>
+    </div>
+    <p *ngIf="hayFiltros" class="small text-secondary mt-3 mb-0">
+      {{ items.length }} resultado{{ items.length === 1 ? '' : 's' }}.
+      <button type="button" class="btn btn-link btn-sm p-0 align-baseline" (click)="limpiarFiltros()">Quitar filtros</button>
+    </p>
+  </div>
+</div>
+
+<ng-container *ngIf="items.length > 0; else vacio">
+  <div class="card tarjeta-veterio d-none d-md-block">
+    <div class="card-body p-0">
+      <app-tabla-mascotas
+        [items]="items"
+        [puedeEditar]="puedeEditar"
+        [puedeAgendar]="puedeEditar"
+        (editar)="editar($event)"
+        (verHistorial)="verHistorial($event)"
+        (agendar)="agendar($event)"
+      ></app-tabla-mascotas>
+    </div>
+  </div>
+
+  <div class="row g-3 d-md-none">
+    <div class="col-12" *ngFor="let item of items; trackBy: seguirPorId">
+      <app-tarjeta-mascota
+        [item]="item"
+        [puedeEditar]="puedeEditar"
+        [puedeAgendar]="puedeEditar"
+        (editar)="editar($event)"
+        (verHistorial)="verHistorial($event)"
+        (agendar)="agendar($event)"
+      ></app-tarjeta-mascota>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #vacio>
+  <div class="card tarjeta-veterio">
+    <app-estado-vacio
+      imagen="imagenes/vacio-mascotas.png"
+      icono="bi-clipboard2-heart"
+      [titulo]="hayFiltros ? 'Sin resultados' : 'Aún no hay mascotas'"
+      [mensaje]="hayFiltros ? 'Prueba con otro nombre o quita los filtros.' : 'Registra la primera mascota con los datos de su dueño.'"
+      [textoAccion]="!hayFiltros && puedeEditar ? 'Registrar mascota' : ''"
+      (accion)="registrar()"
+    ></app-estado-vacio>
+  </div>
+</ng-template>

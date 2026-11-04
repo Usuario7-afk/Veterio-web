@@ -1,0 +1,13 @@
+.dato {
+  background: #f6f7f9;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-weight: 600;
+}
+
+.dato span {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--bs-secondary-color);
+}
